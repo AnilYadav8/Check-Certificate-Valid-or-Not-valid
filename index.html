@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        html,body{
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .container{
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+        }
+        .box{
+            background-color: black;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            border: 3px solid white;
+            
+        }
+        p{
+            color: white;
+            font-size: 22px;
+        }
+        input{
+            background-color: #333;
+            color: white;
+            padding: 10px 40px;
+            border: 2px solid white;
+        }
+        button{
+            background-color: blue;
+            padding: 10px 90px;
+            color: white;
+            border: 2px solid white;
+        }
+        #result{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <p>Please check id card certificate
+                 match ya dismatch in 
+            </p><br><br>
+            <input type="text" placeholder="Enter Certificate No." id="certNumber"><br><br>
+            <button onclick="but()">Check me</button>
+            <!-- <div id="result"></div> -->
+             <p id="result"></p>
+        </div>
+        </div>
+
+        <script>
+            const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDLKfAYlXPd_Q1c4WzZOsPwNvdOBtw5RSOTv5pBT5kei2bw98ULaSpT5b5_4j9ufWOsmRIf-ErlLyF/pub?gid=0&single=true&output=csv";
+    
+            async function but() {
+                const certNumber = document.getElementById("certNumber").value.trim();
+                const resultDiv = document.getElementById("result");
+    
+                if (!certNumber) {
+                    resultDiv.innerHTML = "<p style='color: #ff4d4d;'>⚠ Please enter a certificate number.</p>";
+                    return;
+                }
+    
+                try {
+                    const response = await fetch(sheetURL); //verification
+                    const data = await response.text();
+                    const certificateNumbers = data.split("\n").map(row => row.trim());
+    
+                    if (certificateNumbers.includes(certNumber)) {
+                        resultDiv.innerHTML = "<p style='color: #00ff99;'>✅ Valid Certificate <br> <span>Certified Learner</span></p>";
+                    } else {
+                        resultDiv.innerHTML = "Incorrect detaild"
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = "Error in loading"
+                }
+            }
+        </script>
+        
+    
+</body>
+</html>
